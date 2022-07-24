@@ -104,7 +104,7 @@ class TitleState extends MusicBeatState
 		
 	}
 }
-		#if MODS_ALLOWED
+		#if (polymod) && !MODS_ALLOWED
 		var loadedMods = "";
 		for (modData in modMetadata)
 		{
