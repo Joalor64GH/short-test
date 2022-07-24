@@ -101,11 +101,12 @@ class TitleState extends MusicBeatState
 		WeekData.loadTheFirstEnabledMod();
 		
 		//trace(path, FileSystem.exists(path));
-
+		
+	}
 		#if desktop && MODS_ALLOWED
 		PolymodHandler.loadMods();
 		
-        // Display active mods
+                // Display active mods
 		var loadedMods = "";
 		for (modData in modMetadata)
 		{
