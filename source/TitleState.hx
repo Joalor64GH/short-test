@@ -19,6 +19,8 @@ import openfl.display.BitmapData;
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
+import polymod.PolymodHandler;
+import polymod.ModList;
 #end
 import options.GraphicsSettingsSubState;
 //import flixel.graphics.FlxGraphic;
@@ -100,21 +102,22 @@ class TitleState extends MusicBeatState
 		
 		//trace(path, FileSystem.exists(path));
 
-		#if (polymod)
-		if (sys.FileSystem.exists('polymods/')) {
-			var folders:Array<String> = [];
-			for (file in sys.FileSystem.readDirectory('polymods/')) {
-				var path = haxe.io.Path.join(['polymods/', file]);
-				if (sys.FileSystem.isDirectory(path)) {
-					folders.push(file);
-				}
-			}
-			if(folders.length > 0) {
-				polymod.Polymod.init({modRoot: "polymods", dirs: folders});
-			}
-		}
-		#end
+		#if desktop && MODS_ALLOWED
+		PolymodHandler.loadMods();
 		
+        // Display active mods
+		var loadedMods = "";
+		for (modData in modMetadata)
+		{
+			loadedMods += modData.title + "";
+		}
+
+		var modText = new FlxText(5, 5, 0, "", 16);
+		modText.text = "Loaded Mods: " + loadedMods;
+		modText.color = FlxColor.WHITE;
+		add(modText);
+		#end
+
 		#if CHECK_FOR_UPDATES
 		if(!closedState) {
 			trace('checking for update');
