@@ -103,6 +103,7 @@ class TitleState extends MusicBeatState
 		//trace(path, FileSystem.exists(path));
 		
 	}
+}
 		#if desktop && MODS_ALLOWED
 		PolymodHandler.loadMods();
 		
