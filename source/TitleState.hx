@@ -106,7 +106,7 @@ class TitleState extends MusicBeatState
 }
 		#if (polymod)
 		var loadedMods = "";
-		var modData in modMetadata;
+		for (modData in modMetadata)
 		{
 			loadedMods += modData.title + "";
 		}
