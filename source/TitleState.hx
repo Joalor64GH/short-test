@@ -16,11 +16,11 @@ import flixel.addons.display.FlxBackdrop;
 import haxe.Json;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import polymod.PolymodHandler;
+import polymod.ModList;
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
-import polymod.PolymodHandler;
-import polymod.ModList;
 #end
 import options.GraphicsSettingsSubState;
 //import flixel.graphics.FlxGraphic;
@@ -104,6 +104,10 @@ class TitleState extends MusicBeatState
 		
 	}
 }
+
+                #if desktop
+		PolymodHandler.loadMods();
+		#end
 
 		#if CHECK_FOR_UPDATES
 		if(!closedState) {
