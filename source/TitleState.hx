@@ -106,7 +106,7 @@ class TitleState extends MusicBeatState
 }
 		#if (polymod)
 		var loadedMods = "";
-		var (modData in modMetadata)
+		var modData in modMetadata
 			loadedMods += modData.title + "";
 
 		var modText = new FlxText(5, 5, 0, "", 16);
