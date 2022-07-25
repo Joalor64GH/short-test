@@ -1,4 +1,4 @@
-package polymod;
+package;
 
 #if sys
 import polymod.ModIcon;
