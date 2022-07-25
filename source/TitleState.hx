@@ -105,7 +105,7 @@ class TitleState extends MusicBeatState
 	}
 }
 		#if (polymod)
-		sys.FileSystem.exists('polymods/') {
+		FileSystem.exists('polymods/') {
 			var folders:Array<String> = [];
 			for (file in sys.FileSystem.readDirectory('polymods/')) {
 				var path = haxe.io.Path.join(['polymods/', file]);
