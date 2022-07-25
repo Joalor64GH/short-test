@@ -3,6 +3,8 @@ package;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
+import polymod.Polymod.Framework;
+import polymod.Polymod.PolymodError;
 #end
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -16,8 +18,6 @@ import flixel.addons.display.FlxBackdrop;
 import haxe.Json;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
-import polymod.PolymodHandler;
-import polymod.ModList;
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
@@ -101,12 +101,54 @@ class TitleState extends MusicBeatState
 		WeekData.loadTheFirstEnabledMod();
 		
 		//trace(path, FileSystem.exists(path));
-		
-	}
-}
 
-                #if desktop
-		PolymodHandler.loadMods();
+		#if (polymod && sys)
+                // Get all directories in the mod folder
+		var modDirectory:Array<String> = [];
+		var mods = sys.FileSystem.readDirectory("polymods");
+
+		for (fileText in mods)
+		{
+			if (sys.FileSystem.isDirectory("polymods/" + fileText))
+			{
+				modDirectory.push(fileText);
+			}
+		}
+		trace(modDirectory);
+
+		// Handle mod errors
+		var errors = (error:PolymodError) ->
+		{
+			trace(error.severity + ": " + error.code + " - " + error.message + " - ORIGIN: " + error.origin);
+		};
+
+		// Initialize polymod
+		var modMetadata = polymod.Polymod.init({
+			modRoot: "polymods",
+			dirs: modDirectory,
+			errorCallback: errors,
+			framework: OPENFL,
+			ignoredFiles: polymod.Polymod.getDefaultIgnoreList(),
+			frameworkParams: {
+				assetLibraryPaths: [
+					"default" => "./preload", "fonts" => "fonts",
+					"shared" => "./", "tutorial" => "tutorial", "week1" => "week1", "week2" => "week2",
+					"week3" => "week3", "week4" => "week4", "week5" => "week5", "week6" => "week6", "stages" => "stages"
+				]
+			}
+		});
+
+		// Display active mods
+		var loadedMods = "";
+		for (modData in modMetadata)
+		{
+			loadedMods += modData.title + "";
+		}
+
+		var modText = new FlxText(5, 5, 0, "", 16);
+		modText.text = "Loaded Polymods: " + loadedMods;
+		modText.color = FlxColor.WHITE;
+		add(modText);
 		#end
 
 		#if CHECK_FOR_UPDATES
