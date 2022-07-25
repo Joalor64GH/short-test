@@ -104,20 +104,6 @@ class TitleState extends MusicBeatState
 		
 	}
 }
-		#if (polymod)
-		FileSystem.exists('polymods/') {
-			var folders:Array<String> = [];
-			for (file in sys.FileSystem.readDirectory('polymods/')) {
-				var path = haxe.io.Path.join(['polymods/', file]);
-				if (sys.FileSystem.isDirectory(path)) {
-					folders.push(file);
-				}
-			}
-			if(folders.length > 0) {
-				polymod.Polymod.init({modRoot: "polymods", dirs: folders});
-			}
-		}
-		#end
 
 		#if CHECK_FOR_UPDATES
 		if(!closedState) {
