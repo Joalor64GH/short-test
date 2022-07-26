@@ -125,6 +125,7 @@ class MainMenuState extends MusicBeatState
 				#if !switch 'donate',
 				#end
 				'editors',
+				'extras',
 				'options'
 			];
 		}
@@ -375,6 +376,8 @@ class MainMenuState extends MusicBeatState
 										MusicBeatState.switchState(new AchievementsMenuState());
 									case 'credits':
 										MusicBeatState.switchState(new CreditsState());
+									case 'extras':
+										MusicBeatState.switchState(new ExtrasState());
                                                                         case 'editors':
 										MusicBeatState.switchState(new MasterEditorMenu());
 									case 'options':
