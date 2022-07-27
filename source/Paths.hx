@@ -44,6 +44,7 @@ class Paths
 		'stages',
 		'weeks',
 		'fonts',
+		'haxescript',
 		'scripts',
 		'libs',
 		'achievements'
