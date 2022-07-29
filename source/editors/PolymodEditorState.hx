@@ -2,7 +2,7 @@ package editors;
 
 import polymod.ModList;
 import polymod.PolymodHandler;
-import polymod.ModsMenuOption;
+import polymod.PolymodEditorStateOption;
 import flixel.group.FlxGroup;
 import flixel.system.FlxSound;
 import flash.text.TextField;
@@ -22,7 +22,7 @@ class PolymodEditorState extends MusicBeatState
 	#if MODS_ALLOWED
 	var curSelected:Int = 0;
 
-	var page:FlxTypedGroup<ModsMenuOption> = new FlxTypedGroup<ModsMenuOption>();
+	var page:FlxTypedGroup<PolymodEditorStateOption> = new FlxTypedGroup<PolymodEditorStateOption>();
 
 	public static var instance:PolymodEditorState;
 
@@ -74,7 +74,7 @@ class PolymodEditorState extends MusicBeatState
 
 	function loadMods()
 	{
-		page.forEachExists(function(option:ModsMenuOption)
+		page.forEachExists(function(option:PolymodEditorStateOption)
 		{
 			page.remove(option);
 			option.kill();
@@ -85,7 +85,7 @@ class PolymodEditorState extends MusicBeatState
 
 		for (modId in PolymodHandler.metadataArrays)
 		{
-			var modOption = new ModsMenuOption(ModList.modMetadatas.get(modId).title, modId, optionLoopNum);
+			var modOption = new PolymodEditorStateOption(ModList.modMetadatas.get(modId).title, modId, optionLoopNum);
 			page.add(modOption);
 			optionLoopNum++;
 			coolId = modId;
@@ -107,7 +107,7 @@ class PolymodEditorState extends MusicBeatState
 		bgtwo = new FlxSprite(720, 0).loadGraphic(Paths.image("modbg"));
 		bgtwo.screenCenter(Y);
 
-		ModsMenu.enableButton = new FlxButton(bg.x + 1120, 309, "Enable Mod", function()
+		PolymodEditorState.enableButton = new FlxButton(bg.x + 1120, 309, "Enable Mod", function()
 		{
 			page.members[curSelected].Mod_Enabled = true;
 			if (!enabledMods.contains(page.members[curSelected].Option_Value))
@@ -117,7 +117,7 @@ class PolymodEditorState extends MusicBeatState
 			ModList.setModEnabled(page.members[curSelected].Option_Value, page.members[curSelected].Mod_Enabled);
 		});
 
-		ModsMenu.disableButton = new FlxButton(bg.x + 1120, 380, "Disable Mod", function()
+		PolymodEditorState.disableButton = new FlxButton(bg.x + 1120, 380, "Disable Mod", function()
 		{
 			page.members[curSelected].Mod_Enabled = false;
 			if (enabledMods.contains(page.members[curSelected].Option_Value))
@@ -149,15 +149,6 @@ class PolymodEditorState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		#if desktop
-		if (FlxG.keys.justPressed.SEVEN)
-		{
-			MusicBeatState.switchState(new modloader.ModDownloadState());
-		}
-		#end
-
-		super.update(elapsed);
-
 		// a bit ugly but i was in a hurry
 		if (page.length > 0)
 		{
@@ -168,13 +159,13 @@ class PolymodEditorState extends MusicBeatState
 
 		if (page.length > 0)
 		{
-			if (controls.UP_P)
+			if (controls.UI_UP_P)
 			{
 				curSelected--;
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 			}
 
-			if (controls.DOWN_P)
+			if (controls.UI_DOWN_P)
 			{
 				curSelected++;
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
