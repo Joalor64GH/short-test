@@ -7,12 +7,9 @@ import flixel.FlxSprite;
 
 class ModIcon extends FlxSprite
 {
-	/**
-	 * Used for ModMenu! If you use it elsewhere, prob gonna annoying
-	 */
 	public var sprTracker:FlxSprite;
 
-	public function new(modId:String = 'Template')
+	public function new(modId:String = 'Template Mod')
 	{
 		super();
 
@@ -22,8 +19,6 @@ class ModIcon extends FlxSprite
 		loadGraphic(graphicData, false, 0, 0, false, modId);
 
 		setGraphicSize(150, 150);
-		updateHitbox();
-		
 		scrollFactor.set();
 		antialiasing = true;
 	}

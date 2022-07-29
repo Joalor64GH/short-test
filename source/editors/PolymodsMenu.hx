@@ -1,37 +1,42 @@
-// Mods Menu code ripped off from Leather Engine, credits to Leather128
 package editors;
 
-#if sys
+import polymod.ModList;
+import polymod.PolymodHandler;
+import polymod.ModsMenuOption;
+import flixel.group.FlxGroup;
+import flixel.system.FlxSound;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.group.FlxGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
-import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import Highscore;
-import Song;
+import flixel.ui.FlxButton;
 import lime.utils.Assets;
-import polymod.ModList;
-import polymod.PolymodHandler;
-import polymod.ModIcon;
-import CheckboxThingie;
-import Controls;
-
-using StringTools;
 
 class PolymodsMenu extends MusicBeatState
 {
+	#if MODS_ALLOWED
 	var curSelected:Int = 0;
 
-	public static var instance:PolymodsMenu;
+	var page:FlxTypedGroup<ModsMenuOption> = new FlxTypedGroup<ModsMenuOption>();
 
-	var descriptionText:FlxText;
-	var descBg:FlxSprite;
+	public static var instance:ModsMenu;
+
+	public static var enabledMods = [];
+
+	public static var coolId:String;
+	public static var disableButton:FlxButton;
+	public static var enableButton:FlxButton;
+
+	var bgtwo:FlxSprite;
+	var bg:FlxSprite;
+
+	var infoText:FlxText;
+	var infoTextcool:FlxText;
 
 	override function create()
 	{
@@ -42,44 +47,34 @@ class PolymodsMenu extends MusicBeatState
 		add(bg);
 		bg.screenCenter();
 
+		infoText = new FlxText(0, 0, 0, "NO MODS INSTALLED!", 12);
+		infoText.scrollFactor.set();
+		infoText.setFormat("VCR OSD Mono", 35, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		infoText.borderSize = 2;
+		infoText.screenCenter();
+		infoText.visible = false;
+		infoText.antialiasing = true;
+		add(infoText);
+
+		infoTextcool = new FlxText(340, 340, Std.int(FlxG.width * 0.9), "", 12);
+		infoTextcool.scrollFactor.set();
+		infoTextcool.setFormat(Paths.font("funkin.otf"), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		infoTextcool.borderSize = 2;
+		infoTextcool.screenCenter(Y);
+
 		super.create();
-
-		add(page);
-
-		if (FlxG.sound.music == null)
-			FlxG.sound.playMusic(MusicUtilities.GetOptionsMenuMusic(), 0.7, true);
 
 		PolymodHandler.loadModMetadata();
 
+		add(page);
+
 		loadMods();
-
-		descBg = new FlxSprite(0, FlxG.height - 90).makeGraphic(FlxG.width, 90, 0xFF000000);
-		descBg.alpha = 0.6;
-		add(descBg);
-
-		descriptionText = new FlxText(descBg.x, descBg.y + 4, FlxG.width, "Template Description", 18);
-		descriptionText.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER);
-		descriptionText.borderColor = FlxColor.BLACK;
-		descriptionText.borderSize = 1;
-		descriptionText.borderStyle = OUTLINE;
-		descriptionText.scrollFactor.set();
-		descriptionText.screenCenter(X);
-		add(descriptionText);
-
-		var leText:String = "Press ENTER to enable / disable the currently selected mod.";
-
-		var text:FlxText = new FlxText(0, FlxG.height - 22, FlxG.width, leText, 18);
-		text.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
-		text.scrollFactor.set();
-		text.borderColor = FlxColor.BLACK;
-		text.borderSize = 1;
-		text.borderStyle = OUTLINE;
-		add(text);
+		FlxG.mouse.visible = true;
 	}
 
 	function loadMods()
 	{
-		page.forEachExists(function(option:ModOption)
+		page.forEachExists(function(option:ModsMenuOption)
 		{
 			page.remove(option);
 			option.kill();
@@ -90,38 +85,107 @@ class PolymodsMenu extends MusicBeatState
 
 		for (modId in PolymodHandler.metadataArrays)
 		{
-			var modOption = new ModOption(ModList.modMetadatas.get(modId).title, modId, optionLoopNum);
+			var modOption = new ModsMenuOption(ModList.modMetadatas.get(modId).title, modId, optionLoopNum);
 			page.add(modOption);
 			optionLoopNum++;
+			coolId = modId;
 		}
+
+		if (optionLoopNum > 0)
+		{
+			buildUI();
+		}
+
+		infoText.visible = (page.length == 0);
+	}
+
+	function buildUI()
+	{
+		bg = new FlxSprite(0, 0).loadGraphic(Paths.image("modbg"));
+		// bg.screenCenter(Y);
+
+		bgtwo = new FlxSprite(720, 0).loadGraphic(Paths.image("modbg"));
+		bgtwo.screenCenter(Y);
+
+		ModsMenu.enableButton = new FlxButton(bg.x + 1120, 309, "Enable Mod", function()
+		{
+			page.members[curSelected].Mod_Enabled = true;
+			if (!enabledMods.contains(page.members[curSelected].Option_Value))
+			{
+				enabledMods.push(page.members[curSelected].Option_Value);
+			}
+			ModList.setModEnabled(page.members[curSelected].Option_Value, page.members[curSelected].Mod_Enabled);
+		});
+
+		ModsMenu.disableButton = new FlxButton(bg.x + 1120, 380, "Disable Mod", function()
+		{
+			page.members[curSelected].Mod_Enabled = false;
+			if (enabledMods.contains(page.members[curSelected].Option_Value))
+			{
+				enabledMods.remove(page.members[curSelected].Option_Value);
+			}
+			ModList.setModEnabled(page.members[curSelected].Option_Value, page.members[curSelected].Mod_Enabled);
+		});
+
+		enableButton.setGraphicSize(150, 70);
+		enableButton.updateHitbox();
+		enableButton.color = FlxColor.GREEN;
+		enableButton.label.setFormat(Paths.font("pixel.otf"), 12, FlxColor.WHITE);
+		enableButton.label.fieldWidth = 135;
+		setLabelOffset(enableButton, 5, 22);
+
+		disableButton.setGraphicSize(150, 70);
+		disableButton.updateHitbox();
+		disableButton.color = FlxColor.RED;
+		disableButton.label.setFormat(Paths.font("pixel.otf"), 12, FlxColor.WHITE);
+		disableButton.label.fieldWidth = 135;
+		setLabelOffset(disableButton, 5, 22);
+
+		add(bgtwo);
+		add(infoTextcool);
+		add(disableButton);
+		add(enableButton);
 	}
 
 	override function update(elapsed:Float)
 	{
+		#if desktop
+		if (FlxG.keys.justPressed.SEVEN)
+		{
+			MusicBeatState.switchState(new modloader.ModDownloadState());
+		}
+		#end
+
 		super.update(elapsed);
 
-		if (-1 * Math.floor(FlxG.mouse.wheel) != 0)
+		// a bit ugly but i was in a hurry
+		if (page.length > 0)
 		{
-			curSelected -= 1 * Math.floor(FlxG.mouse.wheel);
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+			infoTextcool.text = ModList.modMetadatas.get(PolymodHandler.metadataArrays[curSelected]).description;
+			infoTextcool.visible = true;
+			infoTextcool.antialiasing = true;
 		}
 
-		if (controls.UI_UP_P)
+		if (page.length > 0)
 		{
-			curSelected -= 1;
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-		}
+			if (controls.UP_P)
+			{
+				curSelected--;
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+			}
 
-		if (controls.UI_DOWN_P)
-		{
-			curSelected += 1;
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+			if (controls.DOWN_P)
+			{
+				curSelected++;
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+			}
 		}
 
 		if (controls.BACK)
 		{
 			PolymodHandler.loadMods();
-			FlxG.switchState(new MainMenuState());
+			FlxG.mouse.visible = false;
+			LoadingState.loadAndSwitchState(new MainMenuState());
 		}
 
 		if (curSelected < 0)
@@ -135,16 +199,17 @@ class PolymodsMenu extends MusicBeatState
 		for (x in page.members)
 		{
 			x.Alphabet_Text.targetY = bruh - curSelected;
-
-			if (x.Alphabet_Text.targetY == 0)
-			{
-				descriptionText.screenCenter(X);
-				descriptionText.text = ModList.modMetadatas.get(x.Option_Value).description + "\nAuthor: " + ModList.modMetadatas.get(x.Option_Value).author
-					+ "\n";
-			}
-
 			bruh++;
 		}
 	}
+
+	// haxeflixel bro why
+	function setLabelOffset(button:FlxButton, x:Float, y:Float)
+	{
+		for (point in button.labelOffsets)
+		{
+			point.set(x, y);
+		}
+	}
+	#end
 }
-#end
