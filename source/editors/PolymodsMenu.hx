@@ -1,5 +1,5 @@
 // Mods Menu code ripped off from Leather Engine, credits to Leather128
-package;
+package editors;
 
 #if sys
 import flash.text.TextField;
@@ -19,7 +19,6 @@ import lime.utils.Assets;
 import polymod.ModList;
 import polymod.PolymodHandler;
 import polymod.ModIcon;
-import substates.ControlMenuSubstate;
 import CheckboxThingie;
 import Controls;
 
@@ -29,9 +28,7 @@ class PolymodsMenu extends MusicBeatState
 {
 	var curSelected:Int = 0;
 
-	public var page:FlxTypedGroup<ModOption> = new FlxTypedGroup<ModOption>();
-
-	public static var instance:ModsMenu;
+	public static var instance:PolymodsMenu;
 
 	var descriptionText:FlxText;
 	var descBg:FlxSprite;

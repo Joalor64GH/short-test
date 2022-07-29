@@ -13,7 +13,7 @@ class ModList
 	{
 		modList.set(mod, enabled);
 
-		utilities.Options.setData(polymodsList, "polymodsList", "polymodsList");
+		setData(polymodsList, "polymodsList", "polymodsList");
 	}
 
 	public static function getModEnabled(mod:String):Bool
@@ -39,8 +39,8 @@ class ModList
 
 	public static function load():Void
 	{
-		if(utilities.Options.getData("polymodsList", "polymodsList") != null && utilities.Options.getData("polymodsList", "polymodsList") != [])
-			modList = utilities.Options.getData("polymodsList", "polymodsList");
+		if(getData("polymodsList", "polymodsList") != null && getData("polymodsList", "polymodsList") != [])
+			ModList = getData("polymodsList", "polymodsList");
 	}
 }
 #end
