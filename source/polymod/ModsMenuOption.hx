@@ -3,7 +3,7 @@ package polymod;
 #if MODS_ALLOWED
 import flixel.FlxSubState;
 import polymod.Polymod.ModMetadata;
-import modloader.ModList;
+import polymod.ModList;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.FlxState;

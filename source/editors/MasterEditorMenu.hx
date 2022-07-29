@@ -131,7 +131,7 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Dialogue Editor':
 					LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
 				case 'Polymod Manager':
-					LoadingState.loadAndSwitchState(new PolymodsMenu(), false);
+					LoadingState.loadAndSwitchState(new PolymodEditorState(), false);
 				case 'Chart Editor'://felt it would be cool maybe
 					LoadingState.loadAndSwitchState(new ChartingState(), false);
                                 case 'Stage Editor':

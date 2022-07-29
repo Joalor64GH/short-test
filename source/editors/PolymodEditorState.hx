@@ -17,14 +17,14 @@ import flixel.util.FlxColor;
 import flixel.ui.FlxButton;
 import lime.utils.Assets;
 
-class PolymodsMenu extends MusicBeatState
+class PolymodEditorState extends MusicBeatState
 {
 	#if MODS_ALLOWED
 	var curSelected:Int = 0;
 
 	var page:FlxTypedGroup<ModsMenuOption> = new FlxTypedGroup<ModsMenuOption>();
 
-	public static var instance:ModsMenu;
+	public static var instance:PolymodEditorState;
 
 	public static var enabledMods = [];
 
