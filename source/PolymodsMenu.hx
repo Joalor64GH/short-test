@@ -1,21 +1,29 @@
+// Mods Menu code ripped off from Leather Engine, credits to Leather128
 package;
 
 #if sys
-import polymod.ModIcon;
-import polymod.ModList;
-import polymod.PolymodHandler;
-import flixel.group.FlxGroup;
-import flixel.system.FlxSound;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.group.FlxGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import Highscore;
+import Song;
 import lime.utils.Assets;
+import polymod.ModList;
+import polymod.PolymodHandler;
+import polymod.ModIcon;
+import substates.ControlMenuSubstate;
+import CheckboxThingie;
+import Controls;
+
+using StringTools;
 
 class PolymodsMenu extends MusicBeatState
 {
@@ -30,19 +38,18 @@ class PolymodsMenu extends MusicBeatState
 
 	override function create()
 	{
-		MusicBeatState.windowNameSuffix = " Polymods Menu";
+		var menuBG:FlxSprite;
 
-		instance = this;
-
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.scrollFactor.set();
-		bg.color = 0xFF353535;
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
+		bg.screenCenter();
+
 		super.create();
 
 		add(page);
 
-		if(FlxG.sound.music == null)
+		if (FlxG.sound.music == null)
 			FlxG.sound.playMusic(MusicUtilities.GetOptionsMenuMusic(), 0.7, true);
 
 		PolymodHandler.loadModMetadata();
@@ -84,7 +91,7 @@ class PolymodsMenu extends MusicBeatState
 
 		var optionLoopNum:Int = 0;
 
-		for(modId in PolymodHandler.metadataArrays)
+		for (modId in PolymodHandler.metadataArrays)
 		{
 			var modOption = new ModOption(ModList.modMetadatas.get(modId).title, modId, optionLoopNum);
 			page.add(modOption);
@@ -96,19 +103,19 @@ class PolymodsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if(-1 * Math.floor(FlxG.mouse.wheel) != 0)
+		if (-1 * Math.floor(FlxG.mouse.wheel) != 0)
 		{
 			curSelected -= 1 * Math.floor(FlxG.mouse.wheel);
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		}
 
-		if (controls.UP_P)
+		if (controls.UI_UP_P)
 		{
 			curSelected -= 1;
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		}
 
-		if (controls.DOWN_P)
+		if (controls.UI_DOWN_P)
 		{
 			curSelected += 1;
 			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
@@ -117,7 +124,7 @@ class PolymodsMenu extends MusicBeatState
 		if (controls.BACK)
 		{
 			PolymodHandler.loadMods();
-			FlxG.switchState(new MasterEditorMenu());
+			FlxG.switchState(new MainMenuState());
 		}
 
 		if (curSelected < 0)
@@ -132,12 +139,11 @@ class PolymodsMenu extends MusicBeatState
 		{
 			x.Alphabet_Text.targetY = bruh - curSelected;
 
-			if(x.Alphabet_Text.targetY == 0)
+			if (x.Alphabet_Text.targetY == 0)
 			{
 				descriptionText.screenCenter(X);
-
-				@:privateAccess
-				descriptionText.text = ModList.modMetadatas.get(x.Option_Value).description + "\nAuthor: " + ModList.modMetadatas.get(x.Option_Value)._author + "\n";
+				descriptionText.text = ModList.modMetadatas.get(x.Option_Value).description + "\nAuthor: " + ModList.modMetadatas.get(x.Option_Value).author
+					+ "\n";
 			}
 
 			bruh++;
