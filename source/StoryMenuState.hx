@@ -1,6 +1,6 @@
 package;
 
-#if desktop
+#if DISCORD_RPC
 import Discord.DiscordClient;
 #end
 import flixel.FlxG;
@@ -88,7 +88,7 @@ class StoryMenuState extends MusicBeatState
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
 
-		#if desktop
+		#if DISCORD_RPC
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Story Mode Menu", null);
 		#end

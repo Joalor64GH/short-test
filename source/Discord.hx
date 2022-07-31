@@ -1,5 +1,6 @@
 package;
 
+#if DISCORD_RPC
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
 
@@ -12,6 +13,7 @@ using StringTools;
 
 class DiscordClient
 {
+	#if DISCORD_RPC
 	public static var isInitialized:Bool = false;
 	public function new()
 	{

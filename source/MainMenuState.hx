@@ -1,6 +1,6 @@
 package;
 
-#if desktop
+#if DISCORD_RPC
 import Discord.DiscordClient;
 #end
 import Achievements;
@@ -83,7 +83,7 @@ class MainMenuState extends MusicBeatState
 		WeekData.loadTheFirstEnabledMod();
                 menuJSON = Json.parse(Paths.getTextFromFile('images/mainmenu/menu_preferences.json'));
 
-		#if desktop
+		#if DISCORD_RPC
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Main Menu", null);
 		#end
