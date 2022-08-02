@@ -122,10 +122,10 @@ class Main extends Sprite
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
 		var dateNow:String = Date.now().toString();
 
-		dateNow = dateNow.replace(" ", "_");
-		dateNow = dateNow.replace(":", "'");
+		dateNow = StringTools.replace(dateNow, " ", "_");
+		dateNow = StringTools.replace(dateNow, ":", "'");
 
-		path = "./crash/" + "Joalor64Engine_" + dateNow + ".txt";
+		path = "crash/" + "J64E_" + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{
@@ -138,18 +138,33 @@ class Main extends Sprite
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Joalor64GH/Joalor64-Engine\n\n> Crash Handler written by: gedehari";
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Joalor64GH/Joalor64-Engine";
 
-		if (!FileSystem.exists("./crash/"))
-			FileSystem.createDirectory("./crash/");
+		if (!FileSystem.exists("crash/"))
+			FileSystem.createDirectory("crash/");
 
 		File.saveContent(path, errMsg + "\n");
 
 		Sys.println(errMsg);
 		Sys.println("Crash dump saved in " + Path.normalize(path));
 
-		Application.current.window.alert(errMsg, "Error!");
-		DiscordClient.shutdown();
+		var crashDialoguePath:String = "J64E-CrashDialog";
+
+		#if windows
+		crashDialoguePath += ".exe";
+		#end
+
+		if (FileSystem.exists(crashDialoguePath))
+		{
+			Sys.println("Found crash dialog: " + crashDialoguePath);
+			new Process(crashDialoguePath, [path]);
+		}
+		else
+		{
+			Sys.println("No crash dialog found! Making a simple alert instead...");
+			Application.current.window.alert(errMsg, "Error!");
+		}
+
 		Sys.exit(1);
 	}
 	#end
