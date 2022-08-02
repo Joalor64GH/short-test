@@ -122,7 +122,7 @@
        	<assets path='Launch.bat' if="windows"/>
 	<assets path='modsList.txt' rename='' />
 	<assets path='LICENSE' rename='LICENSE.txt' />
-	<assets path="J64E-CrashDialog.exe" type="template" if="windows" if="CRASH_HANDLER" />
+	<assets path="J64E-CrashDialog.exe" if="windows || CRASH_HANDLER" />
 	<!-- <template path='mods' /> -->
 	
 	<!-- assets path="CHANGELOG.md" rename='changelog.txt' -->
