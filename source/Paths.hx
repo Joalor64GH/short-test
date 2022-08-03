@@ -34,6 +34,7 @@ class Paths
 		'characters',
 		'custom_events',
 		'custom_notetypes',
+		'custom_states',
 		'data',
 		'songs',
 		'music',
