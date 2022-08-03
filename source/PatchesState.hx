@@ -85,10 +85,10 @@ class PatchesState extends MusicBeatState
 		}
 		#end
 
-		var pisspoop:Array<Array<String>> = [ //Patch - Icon name - Description - Link - BG Color
+		var pisspoop:Array<Array<String>> = [ //Patch - Icon name - Changelog - Link to Version - BG Color
 			['Patch List'],
 			['Joalor64 YT',         'none',             'Project leader, Programmer',                                  		'https://www.youtube.com/channel/UC4tRMRL_iAHX5n1qQpHibfg',  '00FFF6'],
-			['Bot 404',              'none',             'Tiny little helper, Drew his own icon',                                     	    'https://www.youtube.com/channel/UC9ntkZ4Nz3AVKrAnderJnOg',            'FF0040']
+			['Bot 404',              'none',             'Tiny little helper, Drew his own icon',                                     	    'https://www.youtube.com/channel/UC9ntkZ4Nz3AVKrAnderJnOg',            'FF0040'],
 			['PE Discord Server Members',             'none',             'They made the Scripts lmao',                       		'https://discord.gg/2ka77eMXDv',          '6732E3'],
 			['BeastlyGhost',             'none',             'Latin Alphabet Support\nCustomizable Main Menu with .JSON',                       		'https://github.com/BeastlyGhost',          '8CC4FF'],
 			['HiroMizuki',             'none',             'Designer for Latin Alphabet Support',                       		'https://github.com/HiroMizuki',          '912E00'],
