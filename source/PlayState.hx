@@ -1266,7 +1266,7 @@ class PlayState extends MusicBeatState
 				{
 					if(file.endsWith('.hxs') && !filesPushed.contains(file))
 					{
-						luaArray.push(new FunkinLua(folder + file));
+						luaArray.push(new HaxeScript(folder + file));
 						filesPushed.push(file);
 					}
 				}
