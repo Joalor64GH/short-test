@@ -306,7 +306,7 @@ class PatchesState extends MusicBeatState
 		if(folder != null && folder.trim().length > 0) patchesFile = Paths.mods(folder + '/data/patches.txt');
 		else patchesFile = Paths.mods('data/patches.txt');
 
-		if (FileSystem.exists(patchFile))
+		if (FileSystem.exists(patchesFile))
 		{
 			var firstarray:Array<String> = File.getContent(patchesFile).split('\n');
 			for(i in firstarray)
