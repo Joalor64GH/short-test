@@ -798,10 +798,9 @@ class PlayState extends MusicBeatState
 				light.updateHitbox();
 				phillyCityLightsEvent.add(light);
 			}
-		}
-
-
-		// "GLOBAL" SCRIPTS
+		}		
+}
+	        // "GLOBAL" SCRIPTS
 		#if LUA_ALLOWED && HSCRIPT_ALLOWED
 		var filesPushed:Array<String> = [];
 		var foldersToCheck:Array<String> = [Paths.getPreloadPath('scripts/')];
